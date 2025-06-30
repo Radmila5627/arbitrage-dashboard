@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Arbitražna Nadzorna Ploča</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>📊 Arbitražne Transakcije</h1>
+  <table id="csv-table">
+    <thead>
+      <tr>
+        <th>Datum</th>
+        <th>Par</th>
+        <th>Kupi na</th>
+        <th>Prodaj na</th>
+        <th>Profit (%)</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function loadCSV() {
+      const response = await fetch('orders.csv');
+      const data = await response.text();
+
+      const rows = data.trim().split('\n');
+      const tableBody = document.querySelector("#csv-table tbody");
+      tableBody.innerHTML = "";
+
+      rows.slice(1).forEach(row => {
+        const cols = row.split(',');
+        const tr = document.createElement('tr');
+        cols.forEach(col => {
+          const td = document.createElement('td');
+          td.textContent = col;
+          tr.appendChild(td);
+        });
+        tableBody.appendChild(tr);
+      });
+    }
+
+    loadCSV();
+    setInterval(loadCSV, 60000); // osvježava svakih 60 sekundi
+  </script>
+</body>
+</html>
