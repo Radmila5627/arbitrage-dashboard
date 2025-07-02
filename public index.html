@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arbitražna Nadzorna Ploča</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>📊 Arbitražna Nadzorna Ploča</h1>
+  <p>Dobrodošla Radmila 🌻</p>
+
+  <div id="csv-table">Učitavam CSV podatke...</div>
+
+  <script>
+    fetch("narudžbe.csv")
+      .then(response => response.text())
+      .then(data => {
+        const rows = data.trim().split("\n").map(row => row.split(","));
+        const table = document.createElement("table");
+
+        rows.forEach((row, index) => {
+          const tr = document.createElement("tr");
+          row.forEach(cell => {
+            const cellElement = document.createElement(index === 0 ? "th" : "td");
+            cellElement.textContent = cell;
+            tr.appendChild(cellElement);
+          });
+          table.appendChild(tr);
+        });
+
+        document.getElementById("csv-table").innerHTML = "";
+        document.getElementById("csv-table").appendChild(table);
+      })
+      .catch(error => {
+        document.getElementById("csv-table").textContent = "Ne mogu učitati CSV.";
+      });
+  </script>
+</body>
+</html>
