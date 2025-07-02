@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📊 Arbitražna Nadzorna Ploča</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>📊 Arbitražna Nadzorna Ploča</h1>
+  <p>Dobrodošla Radmila 🌻</p>
+  <div id="table-container">Učitavam podatke...</div>
+
+  <script>
+    async function loadCSV() {
+      try {
+        const response = await fetch('/narudžbe.csv');
+        const data = await response.text();
+        const rows = data.trim().split('\n');
+        let html = '<table><tr>';
+
+        const headers = rows[0].split(',');
+        headers.forEach(header => {
+          html += `<th>${header}</th>`;
+        });
+        html += '</tr>';
+
+        for (let i = 1; i < rows.length; i++) {
+          const cols = rows[i].split(',');
+          html += '<tr>';
+          cols.forEach(col => {
+            html += `<td>${col}</td>`;
+          });
+          html += '</tr>';
+        }
+
+        html += '</table>';
+        document.getElementById('table-container').innerHTML = html;
+      } catch (error) {
+        document.getElementById('table-container').innerHTML = 'Greška pri učitavanju CSV datoteke.';
+      }
+    }
+
+    loadCSV();
+    setInterval(loadCSV, 10000); // svakih 10 sekundi
+  </script>
+</body>
+</html>
